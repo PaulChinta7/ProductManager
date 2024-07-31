@@ -2,6 +2,7 @@ package com.example.ProductManager.service;
 
 import com.example.ProductManager.dao.ProductDao;
 import com.example.ProductManager.dto.ProductDto;
+import com.example.ProductManager.exception.ProductNotFoundException;
 import com.example.ProductManager.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -17,11 +19,26 @@ public class ProductService {
 
 
     public ResponseEntity<List<ProductDto>> getProducts() {
-//        exception handling 
         List<Product> products=productdao.findAll();
         List<ProductDto> product_dtos=products.stream().map(this::MaptoProductDto).toList();
         return new ResponseEntity<>(product_dtos,HttpStatus.OK);
     }
+
+    public ResponseEntity<ProductDto> getProduct(String productName) {
+        Optional<Product> product= Optional.ofNullable(productdao.findByProductName(productName));
+        if(product.isPresent()){
+            ProductDto productDto= ProductDto.builder().
+                    product_id(product.get().getProduct_id())
+                    .product_name(product.get().getProduct_name())
+                    .product_price(product.get().getProduct_price())
+                    .build();
+            return new ResponseEntity<ProductDto>(productDto,HttpStatus.OK);
+        }
+        else{
+            throw new ProductNotFoundException("Product is not found in the Database with name->"+productName);
+        }
+    
+    }    
 
     private ProductDto MaptoProductDto(Product product) {
     return ProductDto.builder()
@@ -37,6 +54,17 @@ public class ProductService {
                 .product_price((productDto.getProduct_price()))
                 .build();
         productdao.save(product);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    public ResponseEntity<Void> addProducts(List<ProductDto> productDtos) {
+        for(ProductDto productdto:productDtos){
+            Product product= Product.builder().
+                    product_name(productdto.getProduct_name())
+                    .product_price(productdto.getProduct_price())
+                    .build();
+            productdao.save(product);
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

@@ -19,10 +19,20 @@ public class ProductController {
     public ResponseEntity<List<ProductDto>> getProducts(){
         return productservice.getProducts();
     }
+    @PostMapping("/getProduct")
+    public ResponseEntity<ProductDto> getProduct(@RequestParam String product_name){
+        return productservice.getProduct(product_name);
+        
+    }
+//    add a single product to the database
     @PostMapping("/addProduct")
     public ResponseEntity<Void> addProduct(@RequestBody ProductDto productDto){
         return productservice.addProduct(productDto);
     }
-//    @PostMapping("/addProducts")
-
+//    add products from a list of json.
+    @PostMapping("/addProducts")
+    public ResponseEntity<Void> addProducts(@RequestBody List<ProductDto> productDtos){
+        return productservice.addProducts(productDtos);
+    }
+    
 }
