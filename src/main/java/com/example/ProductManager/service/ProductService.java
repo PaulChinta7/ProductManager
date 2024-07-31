@@ -47,14 +47,14 @@ public class ProductService {
             .product_price(product.getProduct_price())
             .build();
     }
-
-    public ResponseEntity<Void> addProduct(ProductDto productDto){
+//Handle duplicate entries
+    public ResponseEntity<Product> addProduct(ProductDto productDto){
         Product product= Product.builder().product_id(productDto.getProduct_id())
                 .product_name(productDto.getProduct_name())
                 .product_price((productDto.getProduct_price()))
                 .build();
         productdao.save(product);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(product,HttpStatus.CREATED);
     }
 
     public ResponseEntity<Void> addProducts(List<ProductDto> productDtos) {

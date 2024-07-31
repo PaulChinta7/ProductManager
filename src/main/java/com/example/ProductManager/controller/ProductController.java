@@ -1,6 +1,7 @@
 package com.example.ProductManager.controller;
 
 import com.example.ProductManager.dto.ProductDto;
+import com.example.ProductManager.model.Product;
 import com.example.ProductManager.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,12 +10,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/products")
 public class ProductController {
     @Autowired
     ProductService productservice;
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/getProducts")
     public ResponseEntity<List<ProductDto>> getProducts(){
         return productservice.getProducts();
@@ -25,8 +28,9 @@ public class ProductController {
         
     }
 //    add a single product to the database
+@CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/addProduct")
-    public ResponseEntity<Void> addProduct(@RequestBody ProductDto productDto){
+    public ResponseEntity<Product> addProduct(@RequestBody ProductDto productDto){
         return productservice.addProduct(productDto);
     }
 //    add products from a list of json.
