@@ -51,6 +51,7 @@ public class ProductDaoTests {
         Optional<Product> product_found=productDao.findById(product_from_db.getProduct_id());
         if(product_found.isEmpty()){
         Assertions.assertEquals(product_found,Optional.empty());
+        
         }
         else throw new ProductNotFoundException("Product is not found in the database with id"+product_found.get().getProduct_id().toString());
         
