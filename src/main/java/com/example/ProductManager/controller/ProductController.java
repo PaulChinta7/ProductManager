@@ -17,7 +17,7 @@ import java.util.UUID;
 @RequestMapping("/products")
 public class ProductController {
     @Autowired
-    ProductService productservice;
+    private ProductService productservice;
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/getProducts")
     public ResponseEntity<List<ProductDto>> getProducts(){
@@ -45,5 +45,7 @@ public class ProductController {
         return productservice.deleteById(product_id);
         
     }
+//    send an update event to kafka broker with the updated price , the kafka server will send the message to the consumer, where 
+//    the data will be taken and then updates the product price in the other microservice.
     
 }

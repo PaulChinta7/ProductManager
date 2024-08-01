@@ -16,7 +16,7 @@ import java.util.UUID;
 @Service
 public class ProductService {
     @Autowired
-    ProductDao productdao;
+    private ProductDao productdao;
 
 
     public ResponseEntity<List<ProductDto>> getProducts() {
