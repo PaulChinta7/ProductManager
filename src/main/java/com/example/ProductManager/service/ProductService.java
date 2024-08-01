@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ProductService {
@@ -68,4 +69,19 @@ public class ProductService {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    public ResponseEntity<ProductDto> deleteById(UUID productId) {
+        Optional<Product> product=productdao.findById(productId);
+        if(product.isPresent()){
+            productdao.deleteById(productId);
+            ProductDto productDto= ProductDto.builder()
+                    .product_id(product.get().getProduct_id())
+                    .product_name(product.get().getProduct_name())
+                    .product_price(product.get().getProduct_price())
+                    .build();
+            return new ResponseEntity<>(productDto,HttpStatus.OK);
+        }
+        else{
+            throw new ProductNotFoundException("Product is not found in the Database with id"+productId.toString());
+        }
+    }
 }

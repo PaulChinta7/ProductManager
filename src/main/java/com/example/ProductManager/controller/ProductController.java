@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 
 @RestController
@@ -37,6 +38,12 @@ public class ProductController {
     @PostMapping("/addProducts")
     public ResponseEntity<Void> addProducts(@RequestBody List<ProductDto> productDtos){
         return productservice.addProducts(productDtos);
+    }
+    
+    @DeleteMapping("/delete")
+    public ResponseEntity<ProductDto> deleteById(@RequestParam UUID product_id){
+        return productservice.deleteById(product_id);
+        
     }
     
 }
